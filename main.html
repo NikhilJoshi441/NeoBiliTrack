@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBiliTrack - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(120deg, #e0f7fa 0%, #b2ebf2 100%);
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100vw;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 0.7rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 20;
+        }
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00796b;
+            letter-spacing: 1px;
+            margin-left: 2rem;
+        }
+        .navbar-links {
+            margin-right: 2rem;
+        }
+        .navbar-links a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 1.5rem;
+            font-size: 1.05rem;
+            transition: color 0.2s;
+        }
+        .navbar-links a:hover {
+            color: #004d40;
+        }
+        .main-content {
+            padding-top: 4.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .welcome-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+            padding: 2.5rem 2rem 2rem 2rem;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .welcome-title {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #00796b;
+            margin-bottom: 0.5rem;
+        }
+        .welcome-desc {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+        .features-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .feature-card {
+            background: #f0f4fa;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 1.2rem 1.1rem;
+            min-width: 220px;
+            max-width: 260px;
+            flex: 1 1 220px;
+            text-align: center;
+        }
+        .feature-title {
+            color: #00796b;
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-desc {
+            color: #444;
+            font-size: 1rem;
+        }
+        .footer {
+            margin-top: 2.5rem;
+            color: #888;
+            font-size: 0.93rem;
+            text-align: center;
+            letter-spacing: 0.2px;
+        }
+        @media (max-width: 700px) {
+            .welcome-section {
+                max-width: 98vw;
+                padding: 1.2rem 0.5rem;
+            }
+            .main-content {
+                padding-top: 3.2rem;
+            }
+            .features-section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span class="navbar-title">NeoBiliTrack</span>
+        <div class="navbar-links">
+            <a href="main.html">Dashboard</a>
+            <a href="history.html">Test History</a>
+            <a href="#features">Features</a>
+            <a href="#contact">Contact</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="welcome-section">
+            <div class="welcome-title">Welcome, <span id="patientName">User</span>!</div>
+            <div class="welcome-desc">
+                Your non-invasive, affordable jaundice screening solution for newborns.<br>
+                Use the dashboard to access your account, view screening results, and manage your profile.
+            </div>
+            <div style="margin:2rem 0 1.2rem 0;">
+                <form id="bilirubinForm" style="display:flex;flex-direction:column;align-items:center;gap:0.7rem;">
+                    <label for="bilirubinInput" style="font-weight:500;">Enter Bilirubin Value (mg/dL):</label>
+                    <input type="number" id="bilirubinInput" min="0" step="0.01" placeholder="e.g. 12.5" style="max-width:160px;">
+                    <button type="submit" style="background:#009688;">Submit Value</button>
+                </form>
+                <div id="bilirubinResult" style="margin-top:0.7rem;color:#00796b;font-weight:500;"></div>
+            </div>
+            <div style="margin-bottom:1.2rem;">
+                <button id="bluetoothBtn" style="padding:0.7rem 1.2rem;background:linear-gradient(90deg,#00796b 60%,#009688 100%);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:background 0.2s;box-shadow:0 2px 8px rgba(0,121,107,0.08);">Connect to Device via Bluetooth</button>
+                <div id="bluetoothStatus" style="margin-top:0.5rem;color:#555;font-size:0.98rem;"></div>
+            </div>
+        </div>
+        <div class="features-section" id="features">
+            <div class="feature-card">
+                <div class="feature-title">Non-Invasive</div>
+                <div class="feature-desc">Screening is done using saliva, ensuring comfort and safety for newborns.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Affordable</div>
+                <div class="feature-desc">Designed to be cost-effective and accessible for all families.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Accurate & Fast</div>
+                <div class="feature-desc">Get reliable results in minutes, helping early detection and intervention.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Easy to Use</div>
+                <div class="feature-desc">Simple interface for parents and healthcare professionals alike.</div>
+            </div>
+        </div>
+        <div class="footer" id="contact">
+            &copy; 2025 NeoBiliTrack. All rights reserved.<br>
+            Contributors: Siddharth Sharma, Prananshu Agarwal, Nikhil Joshi
+        </div>
+    </div>
+    <script>
+        // Display patient name from localStorage (set after login)
+        document.addEventListener('DOMContentLoaded', function() {
+            const name = localStorage.getItem('patientName') || 'User';
+            document.getElementById('patientName').textContent = name;
+        });
+
+        // Bilirubin value form logic
+        const bilirubinForm = document.getElementById('bilirubinForm');
+        const bilirubinInput = document.getElementById('bilirubinInput');
+        const bilirubinResult = document.getElementById('bilirubinResult');
+        bilirubinForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const value = parseFloat(bilirubinInput.value);
+            if (isNaN(value) || value < 0) {
+                bilirubinResult.textContent = 'Please enter a valid bilirubin value.';
+                bilirubinResult.style.color = '#d8000c';
+                return;
+            }
+            bilirubinInput.value = '';
+            // Get patient age from localStorage (set at registration)
+            let ageYears = parseInt(localStorage.getItem('patientAgeYears') || '0', 10);
+            let ageMonths = parseInt(localStorage.getItem('patientAgeMonths') || '0', 10);
+            // Determine age group
+            let ageGroup = '';
+            if (ageYears === 0 && ageMonths < 1) {
+                ageGroup = '29d-1m';
+            } else if (ageYears === 0 && ageMonths >= 1 && ageMonths < 3) {
+                ageGroup = '1m-3m';
+            } else if ((ageYears === 0 && ageMonths >= 3) || (ageYears === 0 && ageMonths < 6)) {
+                ageGroup = '3m-6m';
+            } else if ((ageYears === 0 && ageMonths >= 6) || (ageYears === 0 && ageMonths < 12)) {
+                ageGroup = '6m-11m';
+            } else if (ageYears === 1 && ageMonths === 0) {
+                ageGroup = '6m-11m';
+            } else {
+                ageGroup = '6m-11m'; // fallback
+            }
+            // Thresholds (all age groups same in your table)
+            const thresholds = {
+                normal: 1.0,
+                mild: 1.0,
+                moderate: 2.0,
+                severe: 5.0
+            };
+            let severity = '';
+            let action = '';
+            if (value < thresholds.normal) {
+                severity = 'Normal';
+                action = 'No action needed.';
+            } else if (value >= thresholds.normal && value < thresholds.moderate) {
+                severity = 'Mild Elevation';
+                action = 'Review recommended.';
+            } else if (value >= thresholds.moderate && value < thresholds.severe) {
+                severity = 'Moderate Elevation';
+                action = 'Full work-up recommended.';
+            } else if (value >= thresholds.severe) {
+                severity = 'Severe/Critical';
+                action = 'Urgent medical attention required!';
+            }
+            let color = '#00796b';
+            if (severity === 'Mild Elevation') color = '#e67e22';
+            if (severity === 'Moderate Elevation') color = '#d35400';
+            if (severity === 'Severe/Critical') color = '#d8000c';
+            bilirubinResult.innerHTML = `<span style='color:${color};'>${severity}: ${value} mg/dL</span><br>${action}`;
+            showLocationPrompt(value, severity, action, ageGroup);
+        });
+
+        // Location prompt and hospital finder
+        function showLocationPrompt(bilirubinValue, severity, action, ageGroup) {
+            // Remove any previous prompt
+            let oldPrompt = document.getElementById('locationPrompt');
+            if (oldPrompt) oldPrompt.remove();
+            const promptDiv = document.createElement('div');
+            promptDiv.id = 'locationPrompt';
+            promptDiv.style.marginTop = '1.2rem';
+            promptDiv.style.background = '#f0f4fa';
+            promptDiv.style.padding = '1rem';
+            promptDiv.style.borderRadius = '8px';
+            promptDiv.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+            promptDiv.innerHTML = `
+                <div style="font-weight:600;color:#00796b;margin-bottom:0.7rem;">Find Nearest Hospital</div>
+                <button id="autoLocationBtn" style="margin-bottom:0.7rem;padding:0.5rem 1rem;background:#009688;color:#fff;border:none;border-radius:6px;cursor:pointer;">Use My Location</button><br>
+                <span style="font-size:0.97rem;">or enter location manually:</span><br>
+                <input type="text" id="manualLocationInput" placeholder="City or Area" style="margin-top:0.5rem;padding:0.5rem;border-radius:6px;border:1px solid #b2dfdb;max-width:180px;">
+                <button id="manualLocationBtn" style="margin-left:0.5rem;padding:0.5rem 1rem;background:#00796b;color:#fff;border:none;border-radius:6px;cursor:pointer;">Search</button>
+                <div id="locationError" style="color:#d8000c;margin-top:0.5rem;"></div>
+            `;
+            bilirubinResult.parentNode.appendChild(promptDiv);
+
+            document.getElementById('autoLocationBtn').onclick = function() {
+                getLocationAndOpenMaps(bilirubinValue, severity, action, ageGroup);
+            };
+            document.getElementById('manualLocationBtn').onclick = function() {
+                const loc = document.getElementById('manualLocationInput').value.trim();
+                if (!loc) {
+                    document.getElementById('locationError').textContent = 'Please enter a location.';
+                    return;
+                }
+                openGoogleMapsAndSendEmail(loc, bilirubinValue, severity, action, ageGroup);
+            };
+        }
+
+        function getLocationAndOpenMaps(bilirubinValue, severity, action, ageGroup) {
+            const errorDiv = document.getElementById('locationError');
+            errorDiv.textContent = '';
+            if (!navigator.geolocation) {
+                errorDiv.textContent = 'Geolocation not supported.';
+                return;
+            }
+            errorDiv.textContent = 'Getting your location...';
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                const loc = `${lat},${lng}`;
+                openGoogleMapsAndSendEmail(loc, bilirubinValue, severity, action, ageGroup);
+            }, function() {
+                errorDiv.textContent = 'Unable to get location. Please enter manually.';
+            });
+        }
+
+        function openGoogleMapsAndSendEmail(location, bilirubinValue, severity, action, ageGroup) {
+            // Only open Google Maps if severe/critical
+            if (severity === 'Severe/Critical') {
+                const url = `https://www.google.com/maps/search/hospital+near+${encodeURIComponent(location)}`;
+                window.open(url, '_blank');
+            }
+            sendResultsEmail(location, bilirubinValue, severity, action, ageGroup);
+        }
+
+        // Send results to user email (placeholder for backend API call)
+        function sendResultsEmail(location, bilirubinValue, severity, action, ageGroup) {
+            // Get patient details
+            const name = localStorage.getItem('patientName') || 'User';
+            const email = localStorage.getItem('patientEmail') || '';
+            const ageYears = localStorage.getItem('patientAgeYears') || '0';
+            const ageMonths = localStorage.getItem('patientAgeMonths') || '0';
+            // Compose data
+            const data = {
+                name,
+                email,
+                bilirubin: bilirubinValue,
+                location,
+                severity,
+                action,
+                ageGroup,
+                ageYears,
+                ageMonths
+            };
+            // Call backend API to send email (replace URL with your backend endpoint)
+            fetch('https://f24126f93113.ngrok-free.app/api/send-results', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.success) {
+                    alert('Test results and nearest hospital have been emailed to you.');
+                } else {
+                    alert('Could not send email: ' + (resp.error || 'Unknown error'));
+                }
+            })
+            .catch(() => {
+                alert('Network error: Could not send email.');
+            });
+        }
+
+        // Bluetooth connection logic (Web Bluetooth API)
+        const bluetoothBtn = document.getElementById('bluetoothBtn');
+        const bluetoothStatus = document.getElementById('bluetoothStatus');
+        bluetoothBtn.addEventListener('click', async function() {
+            bluetoothStatus.textContent = '';
+            if (!navigator.bluetooth) {
+                bluetoothStatus.textContent = 'Bluetooth not supported in this browser.';
+                bluetoothStatus.style.color = '#d8000c';
+                return;
+            }
+            bluetoothStatus.textContent = 'Searching for NeoBiliTrack device...';
+            bluetoothStatus.style.color = '#555';
+            try {
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [] // Add service UUIDs if available
+                });
+                bluetoothStatus.textContent = `Connected to: ${device.name || 'Unknown Device'}`;
+                bluetoothStatus.style.color = '#00796b';
+            } catch (err) {
+                bluetoothStatus.textContent = 'Bluetooth connection cancelled or failed.';
+                bluetoothStatus.style.color = '#d8000c';
+            }
+        });
+
+        function logout() {
+            // Simple logout: clear name and redirect to login page
+            localStorage.removeItem('patientName');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

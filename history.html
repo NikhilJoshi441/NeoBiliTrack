@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBiliTrack - Test History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(120deg, #e0f7fa 0%, #b2ebf2 100%);
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100vw;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 0.7rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 20;
+        }
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00796b;
+            letter-spacing: 1px;
+            margin-left: 2rem;
+        }
+        .navbar-links {
+            margin-right: 2rem;
+        }
+        .navbar-links a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 1.5rem;
+            font-size: 1.05rem;
+            transition: color 0.2s;
+        }
+        .navbar-links a:hover {
+            color: #004d40;
+        }
+        .main-content {
+            padding-top: 4.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .history-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+            padding: 2.5rem 2rem 2rem 2rem;
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .history-title {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #00796b;
+            margin-bottom: 0.5rem;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        .history-table th, .history-table td {
+            border: 1px solid #b2dfdb;
+            padding: 0.7rem 0.5rem;
+            font-size: 1rem;
+        }
+        .history-table th {
+            background: #e0f7fa;
+            color: #00796b;
+            font-weight: 600;
+        }
+        .history-table td {
+            background: #f9f9f9;
+        }
+        .no-history {
+            color: #d8000c;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .footer {
+            margin-top: 2.5rem;
+            color: #888;
+            font-size: 0.93rem;
+            text-align: center;
+            letter-spacing: 0.2px;
+        }
+        @media (max-width: 700px) {
+            .history-section {
+                max-width: 98vw;
+                padding: 1.2rem 0.5rem;
+            }
+            .main-content {
+                padding-top: 3.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span class="navbar-title">NeoBiliTrack</span>
+        <div class="navbar-links">
+            <a href="main.html">Dashboard</a>
+            <a href="#" class="active">Test History</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="history-section">
+            <div class="history-title">Test History</div>
+            <div id="historyContainer">
+                <div style="color:#888;">Loading your test history...</div>
+            </div>
+        </div>
+        <div class="footer">
+            &copy; 2025 NeoBiliTrack. All rights reserved.<br>
+            Contributors: Siddharth Sharma, Prananshu Agarwal, Nikhil Joshi
+        </div>
+    </div>
+    <script>
+        // Fetch and display test history for the logged-in user
+        document.addEventListener('DOMContentLoaded', function() {
+            const email = localStorage.getItem('patientEmail') || '';
+            if (!email) {
+                document.getElementById('historyContainer').innerHTML = '<span class="no-history">Not logged in.</span>';
+                return;
+            }
+            fetch('https://f24126f93113.ngrok-free.app/api/history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && Array.isArray(data.history) && data.history.length > 0) {
+                    let table = '<table class="history-table"><tr><th>Date</th><th>Bilirubin (mg/dL)</th><th>Location</th></tr>';
+                    data.history.forEach(item => {
+                        table += `<tr><td>${item.date}</td><td>${item.bilirubin}</td><td>${item.location}</td></tr>`;
+                    });
+                    table += '</table>';
+                    document.getElementById('historyContainer').innerHTML = table;
+                } else {
+                    document.getElementById('historyContainer').innerHTML = '<span class="no-history">No test history found.</span>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('historyContainer').innerHTML = '<span class="no-history">Failed to load history.</span>';
+            });
+        });
+        function logout() {
+            localStorage.removeItem('patientName');
+            localStorage.removeItem('patientEmail');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
