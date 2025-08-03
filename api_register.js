@@ -18,10 +18,17 @@ app.use(bodyParser.json());
 // Serve static files (login.html, main.html, history.html, etc.)
 app.use(express.static(__dirname));
 
-// Serve login.html at root
+// For Render.com: serve main.html at root if it exists, else login.html
+const fs = require('fs');
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
+    if (fs.existsSync(path.join(__dirname, 'main.html'))) {
+        res.sendFile(path.join(__dirname, 'main.html'));
+    } else {
+        res.sendFile(path.join(__dirname, 'login.html'));
+    }
 });
+
+// Remove duplicate root route above
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
