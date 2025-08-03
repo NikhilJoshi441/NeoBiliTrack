@@ -314,6 +314,16 @@
             const email = localStorage.getItem('patientEmail') || '';
             const ageYears = localStorage.getItem('patientAgeYears') || '0';
             const ageMonths = localStorage.getItem('patientAgeMonths') || '0';
+            // Validate required fields
+            if (!email || !location || typeof bilirubinValue === 'undefined' || bilirubinValue === '' || isNaN(Number(bilirubinValue)) || typeof severity === 'undefined' || typeof action === 'undefined') {
+                alert('Missing or invalid information. Please ensure all fields are filled and valid.');
+                return;
+            }
+            // Ensure age fields are present
+            if (!ageYears && !ageMonths) {
+                alert('Patient age information missing. Please log out and log in again, or re-register.');
+                return;
+            }
             // Compose data
             const data = {
                 name,
@@ -327,7 +337,7 @@
                 ageMonths
             };
             // Call backend API to send email (replace URL with your backend endpoint)
-            fetch('https://f24126f93113.ngrok-free.app/api/send-results', {
+            fetch('https://neobilitrack.onrender.com/api/send-results', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

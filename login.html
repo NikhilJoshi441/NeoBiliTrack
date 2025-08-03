@@ -261,7 +261,7 @@
             // Check verification status and password before login
             try {
                 // First, check verification
-                const res = await fetch('https://f24126f93113.ngrok-free.app/api/check-verified', {
+                const res = await fetch('https://neobilitrack.onrender.com/api/check-verified', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -269,7 +269,7 @@
                 const data = await res.json();
                 if (res.ok && data.verified) {
                     // Now check password
-                    const pwRes = await fetch('https://f24126f93113.ngrok-free.app/api/login', {
+                    const pwRes = await fetch('https://neobilitrack.onrender.com/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email, password })
@@ -324,7 +324,7 @@
             btn.disabled = true;
             btn.textContent = 'Verifying...';
             try {
-            const res = await fetch('https://f24126f93113.ngrok-free.app/api/verify', {
+            const res = await fetch('https://neobilitrack.onrender.com/api/verify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, uniqueId })
@@ -373,7 +373,7 @@
             btn.textContent = 'Processing...';
 
             try {
-            const res = await fetch('https://f24126f93113.ngrok-free.app/api/register', {
+            const res = await fetch('https://neobilitrack.onrender.com/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

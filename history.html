@@ -139,7 +139,7 @@
                 document.getElementById('historyContainer').innerHTML = '<span class="no-history">Not logged in.</span>';
                 return;
             }
-            fetch('https://f24126f93113.ngrok-free.app/api/history', {
+            fetch('https://neobilitrack.onrender.com/api/history', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })

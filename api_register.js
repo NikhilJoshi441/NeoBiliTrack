@@ -12,24 +12,16 @@ const users = {};
 const testHistory = {};
 
 const app = express();
-// Allow all origins and handle preflight for CORS (fixes network errors on cloud hosts)
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-app.options('*', cors());
+app.use(cors());
 app.use(bodyParser.json());
 
 // Serve static files (login.html, main.html, history.html, etc.)
 app.use(express.static(__dirname));
 
-// Always serve login.html at root
+// Serve login.html at root
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
-
-// Remove duplicate root route above
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -194,3 +186,4 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`API server running on http://localhost:${PORT}`);
 });
+ok
