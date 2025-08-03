@@ -12,20 +12,21 @@ const users = {};
 const testHistory = {};
 
 const app = express();
-app.use(cors());
+// Allow all origins and handle preflight for CORS (fixes network errors on cloud hosts)
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.options('*', cors());
 app.use(bodyParser.json());
 
 // Serve static files (login.html, main.html, history.html, etc.)
 app.use(express.static(__dirname));
 
-// For Render.com: serve main.html at root if it exists, else login.html
-const fs = require('fs');
+// Always serve login.html at root
 app.get('/', (req, res) => {
-    if (fs.existsSync(path.join(__dirname, 'main.html'))) {
-        res.sendFile(path.join(__dirname, 'main.html'));
-    } else {
-        res.sendFile(path.join(__dirname, 'login.html'));
-    }
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 // Remove duplicate root route above
